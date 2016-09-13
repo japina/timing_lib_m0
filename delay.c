@@ -1,17 +1,25 @@
 #include "delay.h"
 
+// for q = 8 Mhz and divider 100000 30us
+// for q = 8 Mhz and divider 10000 100us
+// for q = 8 Mhz and divider 1000 1ms
+
+
 #ifndef SystemCoreClock
 // 8Mhz RC clock
-#define SystemCoreClock 8000000
+//#define SystemCoreClock 8000000
 // 14.74660 Mhz quartz
-//#define SystemCoreClock 48000000
+#define SystemCoreClock 48000000
 #endif
 
 static __IO uint32_t TimingDelay;
 
   void Delay_ms(__IO uint32_t nTime) {
-  TimingDelay = nTime;
-  while(TimingDelay != 0);
+	uint8_t i;
+	for(i=0;i<100;i++) {
+	  TimingDelay = nTime;
+	  while(TimingDelay != 0);
+	}
 }
 
 /*void Delay_ms(__IO uint32_t nTime) {
@@ -39,10 +47,11 @@ void TimingDelay_Decrement(void){
 
 void init_timer(void){
     // fq = 8000000
-    if (SysTick_Config(SystemCoreClock / 1000))
+    //if (SysTick_Config(SystemCoreClock / 1000))
     //if (SysTick_Config(SystemCoreClock / 100000))
     // fq = 48000000
-    //if (SysTick_Config(SystemCoreClock / 48000))
+		// 600000 10 ms
+    if (SysTick_Config(SystemCoreClock / 600000)) // 
     // fq = 14746600
     //if (SysTick_Config(SystemCoreClock / 147466))
   {
